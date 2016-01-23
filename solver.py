@@ -34,11 +34,19 @@ def printPath(currentNode,flag):
 			oplist.append(prpos(currentNode.ppos)+""+str(currentNode.move))
 		# print prpos(currentNode.ppos),
 		currentNode = currentNode.parentNode
-	print oplist[::-1]
+	putToScreen(oplist[::-1])
+
+def putToScreen(str):
+	global debug_on
+	if debug_on == True:
+		print str
+
+debug_on = False;
+
+# defining start state and goal state
 
 gameAreaSizeV = 6
 gameAreaSizeH = 5
-# defining start state and goal state
 
 startpos = Position(5,2)
 goalpos = Position(0,2)
@@ -51,6 +59,22 @@ startAreaState = [
 				[0,0,0,0,0],
 			]
 
+# gameAreaSizeV = 7
+# gameAreaSizeH = 3
+# startpos = Position(6,1)
+# goalpos = Position(0,1)
+# startAreaState = [
+# 				[0,0,0],
+# 				[0,1,0],
+# 				[1,0,1],
+# 				[0,1,0],
+# 				[1,0,1],
+# 				[0,1,0],
+# 				[0,0,0]
+# 			]
+
+# gameAreaSizeV = 4
+# gameAreaSizeH = 4
 # startpos = Position(3,0)
 # goalpos = Position(3,3)
 # startAreaState = [
@@ -97,7 +121,7 @@ while 1:
 
 	#generate possible child nodes
 	# 1. childMoveUp
-	print prpos(currentNode.ppos)+" \t- Up -\t\t "+prpos(Position(currentNode.ppos.v-1,currentNode.ppos.h)),
+	putToScreen(prpos(currentNode.ppos)+" \t- Up -\t\t "+prpos(Position(currentNode.ppos.v-1,currentNode.ppos.h)))
 	# check if that space is empty and hence can be moved into, and also check if we are still inside game area
 	if currentNode.ppos.v-1 >= 0 and currentNode.gamestate[currentNode.ppos.v-1][currentNode.ppos.h] == 0:
 		#MoveUp is possible
@@ -108,17 +132,17 @@ while 1:
 		if not getStateHash(moveUpState) in processedNodes and not getStateHash(moveUpState) in mainStackHash:
 			mainStack.append(moveUpState)
 			mainStackHash.append(getStateHash(moveUpState))
-			print " \t- Possible"
+			putToScreen(" \t- Possible")
 		else:
-			print " \t- Already processed"
+			putToScreen(" \t- Already processed")
 	else:
-		print " \t- Not Possible \t",
+		putToScreen(" \t- Not Possible \t")
 		tempGameAreaState = copy.deepcopy(currentNode.gamestate)
 		moveUpState = Node(Position(currentNode.ppos.v-1,currentNode.ppos.h),tempGameAreaState,currentNode,"MU")
 		printPath(moveUpState,True)
 
 	# 2. childMoveDown
-	print prpos(currentNode.ppos)+" \t- Down -\t "+prpos(Position(currentNode.ppos.v+1,currentNode.ppos.h)),
+	putToScreen(prpos(currentNode.ppos)+" \t- Down -\t "+prpos(Position(currentNode.ppos.v+1,currentNode.ppos.h)))
 	# check if that space is empty and hence can be moved into, and also check if we are still inside game area
 	if currentNode.ppos.v+1 < gameAreaSizeV and currentNode.gamestate[currentNode.ppos.v+1][currentNode.ppos.h] == 0:
 		#MoveUp is possible
@@ -127,20 +151,20 @@ while 1:
 		tempGameAreaState = copy.deepcopy(currentNode.gamestate)
 		moveDownState = Node(Position(currentNode.ppos.v+1,currentNode.ppos.h),tempGameAreaState,currentNode,"MD")
 		if not getStateHash(moveDownState) in processedNodes and not getStateHash(moveDownState) in mainStackHash:
-			print " \t- Possible"
+			putToScreen(" \t- Possible")
 			mainStack.append(moveDownState)
 			mainStackHash.append(getStateHash(moveDownState))
 		else:
-			print " \t- Already Processed"
+			putToScreen(" \t- Already Processed")
 	else:
-		print " \t- Not Possible \t",
+		putToScreen(" \t- Not Possible \t")
 		tempGameAreaState = copy.deepcopy(currentNode.gamestate)
 		moveDownState = Node(Position(currentNode.ppos.v+1,currentNode.ppos.h),tempGameAreaState,currentNode,"MD")
 		printPath(moveUpState,True)
 
 
 	# 3. childMoveLeft
-	print prpos(currentNode.ppos)+" \t- Left -\t "+prpos(Position(currentNode.ppos.v,currentNode.ppos.h-1)),
+	putToScreen(prpos(currentNode.ppos)+" \t- Left -\t "+prpos(Position(currentNode.ppos.v,currentNode.ppos.h-1)))
 	# check if that space is empty and hence can be moved into, and also check if we are still inside game area
 	if currentNode.ppos.h-1 >= 0 and currentNode.gamestate[currentNode.ppos.v][currentNode.ppos.h-1] == 0:
 		#MoveUp is possible
@@ -149,19 +173,19 @@ while 1:
 		tempGameAreaState = copy.deepcopy(currentNode.gamestate)
 		moveLeftState = Node(Position(currentNode.ppos.v,currentNode.ppos.h-1),tempGameAreaState,currentNode,"ML")
 		if not getStateHash(moveLeftState) in processedNodes and not getStateHash(moveLeftState) in mainStackHash:
-			print " \t- Possible"
+			putToScreen(" \t- Possible")
 			mainStack.append(moveLeftState)
 			mainStackHash.append(getStateHash(moveLeftState))
 		else:
-			print " \t- Already Processed"
+			putToScreen(" \t- Already Processed")
 	else:
-		print " \t- Not Possible \t",
+		putToScreen(" \t- Not Possible \t")
 		tempGameAreaState = copy.deepcopy(currentNode.gamestate)
 		moveLeftState = Node(Position(currentNode.ppos.v,currentNode.ppos.h-1),tempGameAreaState,currentNode,"ML")
 		printPath(moveUpState,True)
 
 	# 4. childMoveRight
-	print prpos(currentNode.ppos)+" \t- Right -\t "+prpos(Position(currentNode.ppos.v,currentNode.ppos.h+1)),
+	putToScreen(prpos(currentNode.ppos)+" \t- Right -\t "+prpos(Position(currentNode.ppos.v,currentNode.ppos.h+1)))
 	# check if that space is empty and hence can be moved into, and also check if we are still inside game area
 	if currentNode.ppos.h+1 < gameAreaSizeH and currentNode.gamestate[currentNode.ppos.v][currentNode.ppos.h+1] == 0:
 		#MoveUp is possible
@@ -170,13 +194,13 @@ while 1:
 		tempGameAreaState = copy.deepcopy(currentNode.gamestate)
 		moveRightState = Node(Position(currentNode.ppos.v,currentNode.ppos.h+1),tempGameAreaState,currentNode,"MR")
 		if not getStateHash(moveRightState) in processedNodes and not getStateHash(moveRightState) in mainStackHash:
-			print " \t- Possible"
+			putToScreen(" \t- Possible")
 			mainStack.append(moveRightState)
 			mainStackHash.append(getStateHash(moveRightState))
 		else:
-			print " \t- Already Processed"
+			putToScreen(" \t- Already Processed")
 	else:
-		print " \t- Not Possible \t",
+		putToScreen(" \t- Not Possible \t")
 		tempGameAreaState = copy.deepcopy(currentNode.gamestate)
 		moveRightState = Node(Position(currentNode.ppos.v,currentNode.ppos.h+1),tempGameAreaState,currentNode,"MR")
 		printPath(moveUpState,True)
@@ -185,7 +209,7 @@ while 1:
 	curpos = currentNode.ppos
 
 	# 1. Push up
-	print prpos(currentNode.ppos)+" \t- Push Up -\t "+prpos(currentNode.ppos),
+	putToScreen(prpos(currentNode.ppos)+" \t- Push Up -\t "+prpos(currentNode.ppos))
 	# check if move possible
 	# conditions
 	# 	1. boulder present in direction of push
@@ -197,13 +221,13 @@ while 1:
 		tempGameAreaState[curpos.v-2][curpos.h] = 1
 		pushUpState = Node(curpos,tempGameAreaState,currentNode,"PU")
 		if not getStateHash(pushUpState) in processedNodes and not getStateHash(pushUpState) in mainStackHash:
-			print " \t- Possible"
+			putToScreen(" \t- Possible")
 			mainStack.append(pushUpState)
 			mainStackHash.append(getStateHash(pushUpState))
 		else:
-			print " \t- Already Processed"
+			putToScreen(" \t- Already Processed")
 	else:
-		print " \t- Not Possible \t"
+		putToScreen(" \t- Not Possible \t")
 		# tempGameAreaState = copy.deepcopy(currentNode.gamestate)
 		# tempGameAreaState[curpos.v-1][curpos.h] = 0
 		# tempGameAreaState[curpos.v-2][curpos.h] = 1
@@ -212,7 +236,7 @@ while 1:
 
 	curpos = currentNode.ppos
 	# 2. Push down
-	print prpos(currentNode.ppos)+" \t- Push Down -\t "+prpos(currentNode.ppos),
+	putToScreen(prpos(currentNode.ppos)+" \t- Push Down -\t "+prpos(currentNode.ppos))
 	# check if move possible
 	if (curpos.v+2) < gameAreaSizeV and currentNode.gamestate[curpos.v+1][curpos.h] == 1 and currentNode.gamestate[curpos.v+2][curpos.h] == 0:
 		tempGameAreaState = copy.deepcopy(currentNode.gamestate)
@@ -220,13 +244,13 @@ while 1:
 		tempGameAreaState[curpos.v+2][curpos.h] = 1
 		pushDownState = Node(curpos,tempGameAreaState,currentNode,"PD")
 		if not getStateHash(pushDownState) in processedNodes and not getStateHash(pushDownState) in mainStackHash:
-			print " \t- Possible"
+			putToScreen(" \t- Possible")
 			mainStack.append(pushDownState)
 			mainStackHash.append(getStateHash(pushDownState))
 		else:
-			print " \t- Already Processed"
+			putToScreen(" \t- Already Processed")
 	else:
-		print " \t- Not Possible \t"
+		putToScreen(" \t- Not Possible \t")
 		# tempGameAreaState = copy.deepcopy(currentNode.gamestate)
 		# tempGameAreaState[curpos.v+1][curpos.h] = 0
 		# tempGameAreaState[curpos.v+2][curpos.h] = 1
@@ -235,7 +259,7 @@ while 1:
 
 	curpos = currentNode.ppos
 	# 3. Push left
-	print prpos(currentNode.ppos)+" \t- Push Left -\t "+prpos(currentNode.ppos),
+	putToScreen(prpos(currentNode.ppos)+" \t- Push Left -\t "+prpos(currentNode.ppos))
 	# check if move possible
 	if (curpos.h-2) >= 0 and currentNode.gamestate[curpos.v][curpos.h-1] == 1 and currentNode.gamestate[curpos.v][curpos.h-2] == 0:
 		tempGameAreaState = copy.deepcopy(currentNode.gamestate)
@@ -243,13 +267,13 @@ while 1:
 		tempGameAreaState[curpos.v][curpos.h-2] = 1
 		pushLeftState = Node(curpos,tempGameAreaState,currentNode,"PL")
 		if not getStateHash(pushLeftState) in processedNodes and not getStateHash(pushLeftState) in mainStackHash:
-			print " \t- Possible"
+			putToScreen(" \t- Possible")
 			mainStack.append(pushLeftState)
 			mainStackHash.append(getStateHash(pushLeftState))
 		else:
-			print " \t- Already Processed"
+			putToScreen(" \t- Already Processed")
 	else:
-		print " \t- Not Possible \t"
+		putToScreen(" \t- Not Possible \t")
 		# tempGameAreaState = copy.deepcopy(currentNode.gamestate)
 		# tempGameAreaState[curpos.v][curpos.h-1] = 0
 		# tempGameAreaState[curpos.v][curpos.h-2] = 1
@@ -259,7 +283,7 @@ while 1:
 
 	curpos = currentNode.ppos
 	# 4. Push Right
-	print prpos(currentNode.ppos)+" \t- Push Right -\t "+prpos(currentNode.ppos),
+	putToScreen(prpos(currentNode.ppos)+" \t- Push Right -\t "+prpos(currentNode.ppos))
 	# check if move possible
 	if (curpos.h+2) < gameAreaSizeH and currentNode.gamestate[curpos.v][curpos.h+1] == 1 and currentNode.gamestate[curpos.v][curpos.h+2] == 0:
 		tempGameAreaState = copy.deepcopy(currentNode.gamestate)
@@ -267,13 +291,13 @@ while 1:
 		tempGameAreaState[curpos.v][curpos.h+2] = 1
 		pushRightState = Node(curpos,tempGameAreaState,currentNode,"PR")
 		if not getStateHash(pushRightState) in processedNodes and not getStateHash(pushRightState) in mainStackHash:
-			print " \t- Possible"
+			putToScreen(" \t- Possible")
 			mainStack.append(pushRightState)
 			mainStackHash.append(getStateHash(pushRightState))
 		else:
-			print " \t- Already Processed"
+			putToScreen(" \t- Already Processed")
 	else:
-		print " \t- Not Possible \t"
+		putToScreen(" \t- Not Possible \t")
 		# tempGameAreaState = copy.deepcopy(currentNode.gamestate)
 		# tempGameAreaState[curpos.v][curpos.h-1] = 0
 		# tempGameAreaState[curpos.v][curpos.h-2] = 1
